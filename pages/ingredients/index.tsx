@@ -1,7 +1,16 @@
-import Head from 'next/head';
-import Link from 'next/link';
+import type { GetServerSidePropsContext, GetStaticPropsResult } from "next";
+import Head from "next/head";
+import Link from "next/link";
 
-const IngredientsPage = () => {
+import type { Ingredient } from "../../src/types";
+import IngredientsListModule from "../../src/components/modules/IngredientsList";
+import fakeIngredients from "../../src/fakeData/ingredients";
+
+type Props = {
+  ingredients: Ingredient[];
+};
+
+const IngredientsPage = ({ ingredients }: Props) => {
   return (
     <div>
       <Head>
@@ -10,9 +19,20 @@ const IngredientsPage = () => {
       </Head>
       <Link href="/">Home</Link>
       <h1>Ingredients</h1>
-      <Link href="/ingredients/1">Ingredient 1</Link>
+
+      <IngredientsListModule ingredients={ingredients} />
     </div>
   );
+};
+
+export const getServerSideProps = (
+  _context: GetServerSidePropsContext,
+): GetStaticPropsResult<Props> => {
+  return {
+    props: {
+      ingredients: fakeIngredients,
+    },
+  };
 };
 
 export default IngredientsPage;

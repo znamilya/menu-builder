@@ -1,12 +1,16 @@
-import type { GetServerSidePropsContext, GetStaticPropsResult } from 'next';
-import Head from 'next/head';
-import Link from 'next/link';
+import type { GetServerSidePropsContext, GetStaticPropsResult } from "next";
+import Head from "next/head";
+import Link from "next/link";
+
+import type { Dish } from "../../src/types";
+import IngredientsListModule from "../../src/components/modules/IngredientsList";
+import fakeDishes from "../../src/fakeData/dishes";
 
 type Props = {
-  dishId?: number;
+  dish: Dish;
 };
 
-const DishPage = ({ dishId }: Props) => {
+const DishPage = ({ dish }: Props) => {
   return (
     <div>
       <Head>
@@ -15,7 +19,10 @@ const DishPage = ({ dishId }: Props) => {
       </Head>
       <Link href="/">Home</Link>
       <Link href="/dishes">Dishes</Link>
-      <h1>Dish {dishId}</h1>
+      <h1>Dish {dish.title}</h1>
+
+      <h2>Ingredients:</h2>
+      <IngredientsListModule ingredients={dish.ingredients} />
     </div>
   );
 };
@@ -26,9 +33,15 @@ export const getServerSideProps = (
   const id = context?.params?.id;
   const dishId = id ? Number(id) : undefined;
 
+  if (!dishId || fakeDishes[dishId - 1] === undefined) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
-      dishId,
+      dish: fakeDishes[dishId - 1],
     },
   };
 };
