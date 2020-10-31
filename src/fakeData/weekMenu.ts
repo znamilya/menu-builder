@@ -4,6 +4,7 @@ import dishes from "./dishes";
 
 export default {
   id: 1,
+  title: "Неделя 1",
   price: 100,
   daysMenu: [
     {

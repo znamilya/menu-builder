@@ -24,6 +24,7 @@ export type DayMenu = {
 
 export type WeekMenu = {
   id: number;
+  title: string;
   price: number;
   daysMenu: DayMenu[];
 };

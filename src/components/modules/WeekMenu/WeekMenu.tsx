@@ -10,6 +10,7 @@ type Props = {
 const WeekMenuModule = ({ weekMenu }: Props) => {
   return (
     <div>
+      <h1>{weekMenu.title}</h1>
       {weekMenu.daysMenu.map((dayMenu) => (
         <section key={dayMenu.day}>
           <h2>{dayMenu.day}</h2>
