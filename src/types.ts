@@ -16,7 +16,7 @@ export type Dish = {
 
 export type DayMenu = {
   id: number;
-  day: 'Mon' | 'Tue';
+  day: "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sut" | "Sun";
   breakfask: Dish;
   lunch: Dish;
   dinner: Dish;

@@ -1,7 +1,16 @@
-import Head from 'next/head';
-import Link from 'next/link';
+import type { GetServerSidePropsContext, GetStaticPropsResult } from "next";
+import Head from "next/head";
+import Link from "next/link";
 
-const HomePage = () => {
+import type { WeekMenu } from "../src/types";
+import WeekMenuModule from "../src/components/modules/WeekMenu";
+import fakeWeekMenu from "../src/fakeData/weekMenu";
+
+type Props = {
+  weekMenu: WeekMenu;
+};
+
+const HomePage = ({ weekMenu }: Props) => {
   return (
     <div>
       <Head>
@@ -12,9 +21,19 @@ const HomePage = () => {
         <Link href="/">Home</Link>
         <Link href="/dishes">Dishes</Link>
         <Link href="/ingredients">Ingredients</Link>
+
+        <WeekMenuModule weekMenu={weekMenu} />
       </main>
     </div>
   );
+};
+
+export const getServerSideProps = (): GetStaticPropsResult<Props> => {
+  return {
+    props: {
+      weekMenu: fakeWeekMenu,
+    },
+  };
 };
 
 export default HomePage;
