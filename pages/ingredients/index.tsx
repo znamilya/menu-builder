@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, GetStaticPropsResult } from "next";
+import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -25,9 +25,9 @@ const IngredientsPage = ({ ingredients }: Props) => {
   );
 };
 
-export const getServerSideProps = (
-  _context: GetServerSidePropsContext,
-): GetStaticPropsResult<Props> => {
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  _context,
+) => {
   return {
     props: {
       ingredients: fakeIngredients,

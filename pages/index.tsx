@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, GetStaticPropsResult } from "next";
+import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -28,7 +28,7 @@ const HomePage = ({ weekMenu }: Props) => {
   );
 };
 
-export const getServerSideProps = (): GetStaticPropsResult<Props> => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   return {
     props: {
       weekMenu: fakeWeekMenu,

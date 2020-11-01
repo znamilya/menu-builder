@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, GetStaticPropsResult } from "next";
+import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -24,9 +24,9 @@ const IngredientPage = ({ ingredient }: Props) => {
   );
 };
 
-export const getServerSideProps = (
-  context: GetServerSidePropsContext,
-): GetStaticPropsResult<Props> => {
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  context,
+) => {
   const id = context?.params?.id;
   const ingredientId = id ? Number(id) : undefined;
 
