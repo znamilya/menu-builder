@@ -33,15 +33,4 @@ const IngredientsPage = ({}: Props) => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps<Props> = async (
-//   _context,
-// ) => {
-//   console.log(_context.req);
-//   return {
-//     props: {
-//       ingredients: fakeIngredients,
-//     },
-//   };
-// };
-
 export default IngredientsPage;

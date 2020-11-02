@@ -1,15 +1,26 @@
-import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
-import type { Ingredient } from "../../src/types";
-import fakeIngredients from "../../src/fakeData/ingredients";
+import useRouterQuery from "../../src/hooks/useRouterQuery";
+import useIngredientQuery from "../../src/hooks/useIngredientQuery";
 
-type Props = {
-  ingredient: Ingredient;
-};
+type Props = {};
 
-const IngredientPage = ({ ingredient }: Props) => {
+const IngredientPage = ({}: Props) => {
+  // FIXIT: Figure out how to resolve return type based on constructor passed
+  const ingredientId = useRouterQuery("id", Number) as number | undefined;
+  const ingredientQuery = useIngredientQuery(ingredientId);
+
+  if (ingredientQuery.isLoading) {
+    return "Loading...";
+  }
+
+  if (!ingredientQuery.data) {
+    return <h1>Not found</h1>;
+  }
+
+  const ingredient = ingredientQuery.data;
+
   return (
     <div>
       <Head>
@@ -22,25 +33,6 @@ const IngredientPage = ({ ingredient }: Props) => {
       <h2>{ingredient.price}</h2>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context,
-) => {
-  const id = context?.params?.id;
-  const ingredientId = id ? Number(id) : undefined;
-
-  if (!ingredientId || !fakeIngredients[ingredientId - 1]) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      ingredient: fakeIngredients[ingredientId - 1],
-    },
-  };
 };
 
 export default IngredientPage;

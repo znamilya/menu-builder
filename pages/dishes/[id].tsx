@@ -1,16 +1,27 @@
-import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
-import type { Dish } from "../../src/types";
 import IngredientsListModule from "../../src/components/modules/IngredientsList";
-import fakeDishes from "../../src/fakeData/dishes";
+import useRouterQuery from "../../src/hooks/useRouterQuery";
+import useDishQuery from "../../src/hooks/useDishQuery";
 
-type Props = {
-  dish: Dish;
-};
+type Props = {};
 
-const DishPage = ({ dish }: Props) => {
+const DishPage = ({}: Props) => {
+  // FIXIT: Figure out how to resolve return type based on constructor passed
+  const dishId = useRouterQuery("id", Number) as number | undefined;
+  const dishQuery = useDishQuery(dishId);
+
+  if (dishQuery.isLoading) {
+    return "Loading...";
+  }
+
+  if (!dishQuery.data) {
+    return <h1>Not found</h1>;
+  }
+
+  const dish = dishQuery.data;
+
   return (
     <div>
       <Head>
@@ -25,25 +36,6 @@ const DishPage = ({ dish }: Props) => {
       <IngredientsListModule ingredients={dish.ingredients} />
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context,
-) => {
-  const id = context?.params?.id;
-  const dishId = id ? Number(id) : undefined;
-
-  if (!dishId || fakeDishes[dishId - 1] === undefined) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      dish: fakeDishes[dishId - 1],
-    },
-  };
 };
 
 export default DishPage;
