@@ -1,16 +1,20 @@
-import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
-import type { Ingredient } from "../../src/types";
+import useIngredientsQuery from "../../src/hooks/useIngredientsQuery";
 import IngredientsListModule from "../../src/components/modules/IngredientsList";
-import fakeIngredients from "../../src/fakeData/ingredients";
 
-type Props = {
-  ingredients: Ingredient[];
-};
+type Props = {};
 
-const IngredientsPage = ({ ingredients }: Props) => {
+const IngredientsPage = ({}: Props) => {
+  const ingredientsQuery = useIngredientsQuery();
+
+  if (ingredientsQuery.isLoading) {
+    return "Loading...";
+  }
+
+  const ingredients = ingredientsQuery.data;
+
   return (
     <div>
       <Head>
@@ -20,19 +24,24 @@ const IngredientsPage = ({ ingredients }: Props) => {
       <Link href="/">Home</Link>
       <h1>Ingredients</h1>
 
-      <IngredientsListModule ingredients={ingredients} />
+      {ingredients?.length ? (
+        <IngredientsListModule ingredients={ingredients} />
+      ) : (
+        <h2>Add first ingredients</h2>
+      )}
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  _context,
-) => {
-  return {
-    props: {
-      ingredients: fakeIngredients,
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps<Props> = async (
+//   _context,
+// ) => {
+//   console.log(_context.req);
+//   return {
+//     props: {
+//       ingredients: fakeIngredients,
+//     },
+//   };
+// };
 
 export default IngredientsPage;

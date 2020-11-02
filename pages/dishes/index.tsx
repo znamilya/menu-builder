@@ -1,16 +1,20 @@
-import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
-import type { Dish } from "../../src/types";
+import useDishesQuery from "../../src/hooks/useDishesQuery";
 import DishesListModule from "../../src/components/modules/DishesList";
-import fakeDishes from "../../src/fakeData/dishes";
 
-type Props = {
-  dishes: Dish[];
-};
+type Props = {};
 
-const DishesPage = ({ dishes }: Props) => {
+const DishesPage = ({}: Props) => {
+  const dishesQuery = useDishesQuery();
+
+  if (dishesQuery.isLoading) {
+    return "Loading...";
+  }
+
+  const dishes = dishesQuery.data;
+
   return (
     <div>
       <Head>
@@ -20,19 +24,13 @@ const DishesPage = ({ dishes }: Props) => {
       <Link href="/">Home</Link>
       <h1>Dishes</h1>
 
-      <DishesListModule dishes={dishes} />
+      {dishes?.length ? (
+        <DishesListModule dishes={dishes} />
+      ) : (
+        <h2>Add first dish</h2>
+      )}
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  _context,
-) => {
-  return {
-    props: {
-      dishes: fakeDishes,
-    },
-  };
 };
 
 export default DishesPage;
